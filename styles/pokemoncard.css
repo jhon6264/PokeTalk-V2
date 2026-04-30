@@ -1,0 +1,1464 @@
+/* assets/css/pokemoncard.css
+   Enhanced Pokémon Card System Styles - TCG HYBRID DESIGN
+   Custom Hybrid: Modern Glass Morphism + Authentic TCG Elements
+*/
+
+/* ===== TCG COLOR SYSTEM & VARIABLES ===== */
+:root {
+  /* TCG Energy Colors */
+  --tcg-grass: #78C850;
+  --tcg-fire: #F08030;
+  --tcg-water: #6890F0;
+  --tcg-electric: #F8D030;
+  --tcg-psychic: #F85888;
+  --tcg-fighting: #C03028;
+  --tcg-dark: #705848;
+  --tcg-steel: #B8B8D0;
+  --tcg-fairy: #EE99AC;
+  --tcg-dragon: #7038F8;
+  --tcg-normal: #A8A878;
+  --tcg-flying: #A890F0;
+  --tcg-poison: #A040A0;
+  --tcg-ground: #E0C068;
+  --tcg-rock: #B8A038;
+  --tcg-bug: #A8B820;
+  --tcg-ghost: #705898;
+  --tcg-ice: #98D8D8;
+  
+  /* TCG Card Colors */
+  --tcg-border: #f8d848;
+  --tcg-border-inner: #e8c840;
+  --tcg-card-bg: #ffffff;
+  --tcg-card-stock: #f8f8f8;
+  --tcg-section-bg: #ffffff;
+  --tcg-text-dark: #2d3748;
+  --tcg-shadow: #000000;
+  
+  /* Modern Glass Colors */
+  --glass-light: rgba(255, 255, 255, 0.15);
+  --glass-medium: rgba(255, 255, 255, 0.25);
+  --glass-dark: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.3);
+
+  /* Game Boy Colors */
+  --gb-dark: #0f380f;
+  --gb-medium: #306230;
+  --gb-light: #8bac0f;
+  --gb-bright: #9bbc0f;
+  --gb-white: #ffffff;
+
+  /* CYBERPUNK COMPARISON COLORS */
+  --cyber-black: #0a0a0a;
+  --cyber-dark: #111111;
+  --cyber-gray: #1a1a1a;
+  --cyber-light: #2a2a2a;
+  --neon-blue: #00ff88;
+  --neon-cyan: #00ffff;
+  --neon-purple: #bf00ff;
+  --neon-orange: #ff6b35;
+}
+
+/* ===== TCG HYBRID POKÉMON CARD SYSTEM ===== */
+.pokemon-card {
+  /* TCG Structure */
+  border: 8px solid var(--tcg-border);
+  border-radius: 16px;
+  background: linear-gradient(145deg, var(--tcg-card-bg), var(--tcg-card-stock));
+  
+  /* Modern Glass Effects */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  /* TCG Shadow & Depth */
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    4px 4px 0 var(--tcg-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  
+  /* Layout */
+  padding: clamp(0.75rem, 1.5vw, 1rem);
+  margin: clamp(0.5rem, 1vw, 0.75rem);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vw, 1rem);
+  
+  /* Positioning */
+  position: relative;
+  overflow: hidden;
+}
+
+/* TCG Inner Bevel Effect */
+.pokemon-card::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 4px solid var(--tcg-border-inner);
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Modern Gradient Background */
+.pokemon-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--card-gradient);
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0.8;
+}
+
+/* Card Hover Effects */
+.pokemon-card:hover {
+  transform: translateY(-6px) rotate(1deg);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.2),
+    6px 6px 0 var(--tcg-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Card Sizes */
+.pokemon-card.card-standard { 
+  max-width: min(94vw, 1000px);
+  min-width: min(280px, 85vw);
+  width: 100%;
+}
+
+.pokemon-card.card-comparison { 
+  max-width: min(420px, 40vw);
+  min-width: min(260px, 75vw);
+  flex: 1;
+}
+
+/* ===== TCG HEADER SECTION ===== */
+.card-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: clamp(0.75rem, 1.5vw, 1rem);
+  align-items: center;
+  min-width: min-content;
+  background: var(--tcg-type-color, var(--tcg-normal));
+  margin: -8px -8px 12px -8px;
+  padding: 16px;
+  border-bottom: 4px solid var(--tcg-shadow);
+  position: relative;
+  z-index: 2;
+}
+
+/* TCG HP Badge */
+.hp-badge {
+  background: #ff6b6b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  border: 3px solid var(--tcg-shadow);
+  box-shadow: 2px 2px 0 var(--tcg-shadow);
+  text-shadow: 1px 1px 0 var(--tcg-shadow);
+  order: 3;
+}
+
+/* Sprite Container - TCG Style */
+.sprite-container {
+  display: flex;
+  justify-content: center;
+  order: 1;
+}
+
+.pokemon-sprite {
+  width: clamp(80px, 15vw, 120px);
+  height: clamp(80px, 15vw, 120px);
+  border-radius: 50%;
+  border: 4px solid var(--tcg-shadow);
+  background: var(--glass-light);
+  backdrop-filter: blur(10px);
+  padding: clamp(0.2rem, 0.6vw, 0.3rem);
+  transition: all 0.3s ease;
+  object-fit: contain;
+  box-shadow: 3px 3px 0 var(--tcg-shadow);
+}
+
+.pokemon-card:hover .pokemon-sprite {
+  transform: scale(1.1) rotate(5deg);
+  border-color: var(--tcg-border);
+  box-shadow: 4px 4px 0 var(--tcg-shadow);
+}
+
+/* Header Info - TCG Style */
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
+  min-width: 0;
+  order: 2;
+}
+
+/* TCG Pokémon Name */
+.pokemon-name {
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 900;
+  color: white;
+  text-shadow: 2px 2px 0 var(--tcg-shadow);
+  letter-spacing: 1px;
+  word-break: break-word;
+}
+
+.pokemon-id {
+  color: white;
+  opacity: 0.9;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-weight: 700;
+  text-shadow: 1px 1px 0 var(--tcg-shadow);
+}
+
+/* TCG Energy Symbols */
+.type-container {
+  display: flex;
+  gap: clamp(0.4rem, 0.8vw, 0.6rem);
+  flex-wrap: wrap;
+}
+
+.energy-symbol {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--tcg-shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.7rem;
+  color: white;
+  text-shadow: 1px 1px 0 var(--tcg-shadow);
+  box-shadow: 2px 2px 0 var(--tcg-shadow);
+}
+
+/* Energy Type Colors */
+.energy-grass { background: var(--tcg-grass); }
+.energy-fire { background: var(--tcg-fire); }
+.energy-water { background: var(--tcg-water); }
+.energy-electric { background: var(--tcg-electric); }
+.energy-psychic { background: var(--tcg-psychic); }
+.energy-fighting { background: var(--tcg-fighting); }
+.energy-dark { background: var(--tcg-dark); }
+.energy-steel { background: var(--tcg-steel); }
+.energy-fairy { background: var(--tcg-fairy); }
+.energy-dragon { background: var(--tcg-dragon); }
+.energy-normal { background: var(--tcg-normal); }
+.energy-flying { background: var(--tcg-flying); }
+.energy-poison { background: var(--tcg-poison); }
+.energy-ground { background: var(--tcg-ground); }
+.energy-rock { background: var(--tcg-rock); }
+.energy-bug { background: var(--tcg-bug); }
+.energy-ghost { background: var(--tcg-ghost); }
+.energy-ice { background: var(--tcg-ice); }
+
+/* ===== HYBRID LAYOUT SYSTEM ===== */
+.card-content-desktop {
+  display: grid;
+  grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: start;
+  width: 100%;
+}
+
+.card-content-mobile {
+  display: none;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  width: 100%;
+}
+
+.card-column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vw, 1rem);
+  min-width: min-content;
+}
+
+/* ===== TCG SECTION STYLES ===== */
+.section-label {
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-weight: 800;
+  margin-bottom: clamp(0.5rem, 1vw, 0.75rem);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: #4a4a4a;
+  padding: 8px 16px;
+  margin: -8px -8px 12px -8px;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 3px solid var(--tcg-shadow);
+  text-shadow: 1px 1px 0 var(--tcg-shadow);
+}
+
+/* TCG Section Containers */
+.stats-section,
+.attributes-section,
+.moves-section,
+.description-section {
+  background: var(--tcg-section-bg);
+  border: 3px solid var(--tcg-shadow);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 1.5vw, 1rem);
+  position: relative;
+  box-shadow: 3px 3px 0 var(--tcg-shadow);
+}
+
+/* Modern Glass Overlay */
+.stats-section::before,
+.attributes-section::before,
+.moves-section::before,
+.description-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--glass-light);
+  backdrop-filter: blur(10px);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* ===== TCG STATS SYSTEM ===== */
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vw, 0.6rem);
+  min-width: min-content;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
+  min-width: min-content;
+}
+
+.stat-label {
+  font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+  font-weight: 700;
+  width: clamp(4.5rem, 8vw, 5.5rem);
+  color: var(--tcg-text-dark);
+  flex-shrink: 0;
+}
+
+/* TCG Stat Bars */
+.stat-bar-container {
+  flex: 1;
+  background: #e0e0e0;
+  border: 2px solid var(--tcg-shadow);
+  border-radius: 10px;
+  height: clamp(1.5rem, 2.5vw, 1.75rem);
+  overflow: hidden;
+  position: relative;
+  min-width: 120px;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.1);
+}
+
+.stat-bar {
+  height: 100%;
+  background: linear-gradient(45deg, var(--stat-color, #667eea), var(--stat-color-dark, #764ba2));
+  border-right: 2px solid var(--tcg-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 clamp(0.5rem, 1vw, 0.75rem);
+  transition: width 0.5s ease;
+  min-width: fit-content;
+  position: relative;
+}
+
+.stat-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent 50%, rgba(255,255,255,0.3) 50%);
+}
+
+.stat-value {
+  font-size: clamp(0.7rem, 1.1vw, 0.8rem);
+  font-weight: 800;
+  color: white;
+  text-shadow: 1px 1px 0 var(--tcg-shadow);
+}
+
+/* ===== TCG ATTRIBUTES SYSTEM ===== */
+.attributes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
+  min-width: min-content;
+}
+
+.attribute-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(0.4rem, 0.8vw, 0.6rem);
+  background: var(--glass-light);
+  backdrop-filter: blur(5px);
+  border: 2px solid var(--tcg-shadow);
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 var(--tcg-shadow);
+}
+
+.attribute-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.attribute-label {
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  font-weight: 700;
+  color: var(--tcg-text-dark);
+}
+
+.attribute-value {
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  font-weight: 800;
+  color: var(--tcg-text-dark);
+}
+
+/* ===== TCG MOVES SYSTEM ===== */
+.moves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: clamp(0.4rem, 0.8vw, 0.6rem);
+  width: 100%;
+}
+
+.move-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(0.4rem, 0.8vw, 0.6rem);
+  background: var(--tcg-section-bg);
+  border: 2px solid var(--tcg-shadow);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 var(--tcg-shadow);
+}
+
+.move-item:hover {
+  background: #f8f8f8;
+  border-color: var(--tcg-border);
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--tcg-shadow);
+}
+
+.move-name {
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  font-weight: 700;
+  color: var(--tcg-text-dark);
+}
+
+.move-power {
+  font-size: clamp(0.65rem, 1.1vw, 0.75rem);
+  background: #ff6b6b;
+  color: white;
+  padding: clamp(0.1rem, 0.3vw, 0.2rem) clamp(0.3rem, 0.6vw, 0.4rem);
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid var(--tcg-shadow);
+}
+
+/* ===== TCG DESCRIPTION SECTION ===== */
+.description-section {
+  background: var(--tcg-section-bg);
+  border: 3px solid var(--tcg-shadow);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 1.5vw, 1rem);
+  width: 100%;
+  box-shadow: 3px 3px 0 var(--tcg-shadow);
+}
+
+.pokemon-description {
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  line-height: 1.5;
+  margin: 0;
+  color: var(--tcg-text-dark);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ===== SPECIAL TCG EFFECTS ===== */
+/* Holographic Rare Cards */
+.pokemon-card.rare {
+  background: linear-gradient(45deg, 
+    #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, 
+    #feca57, #ff9ff3, #54a0ff, #5f27cd);
+  background-size: 400% 400%;
+  animation: holographic 3s ease infinite;
+}
+
+@keyframes holographic {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Shiny Pokémon Effect */
+.pokemon-card.shiny::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.6), 
+    transparent);
+  animation: shine 2s infinite;
+  z-index: 1;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Legendary Glow */
+.pokemon-card.legendary {
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.5),
+    4px 4px 0 var(--tcg-shadow),
+    0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.pokemon-card.legendary::after {
+  animation: legendary-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes legendary-glow {
+  from { opacity: 0.6; }
+  to { opacity: 0.9; }
+}
+
+/* ===== CYBERPUNK COMPARISON SYSTEM ===== */
+.comparison-container {
+  background: var(--cyber-black) !important;
+  border: 2px solid var(--neon-blue);
+  border-radius: 12px;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+  color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 136, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+}
+
+/* Cyberpunk Grid Pattern */
+.comparison-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(90deg, transparent 95%, rgba(0, 255, 136, 0.05) 100%),
+    linear-gradient(transparent 95%, rgba(0, 255, 136, 0.05) 100%);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.3;
+}
+
+/* Animated Scan Line */
+.comparison-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+  animation: scan 3s linear infinite;
+  z-index: 2;
+}
+
+@keyframes scan {
+  0% { top: 0; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Cyberpunk Header */
+.comparison-header {
+  text-align: center;
+  margin-bottom: 1.5rem !important;
+  padding: 1rem;
+  background: var(--cyber-gray);
+  border-bottom: 2px solid var(--neon-blue);
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.comparison-title {
+  font-size: 1.5rem !important;
+  font-weight: 900;
+  margin: 0 0 0.8rem 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem !important;
+  flex-wrap: wrap;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+  font-family: 'Courier New', monospace;
+}
+
+.pokemon1-name, .pokemon2-name {
+  background: var(--cyber-dark);
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  border: 2px solid var(--neon-blue);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.vs-text {
+  font-size: 1.1rem !important;
+  font-weight: 800;
+  color: var(--neon-blue);
+  background: var(--cyber-dark);
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--neon-blue);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.winner-announcement {
+  font-size: 1rem !important;
+  font-weight: 800;
+  padding: 0.8rem 1.5rem !important;
+  border-radius: 8px;
+  background: var(--cyber-gray);
+  display: inline-block;
+  border: 2px solid var(--neon-blue);
+  text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+}
+
+.winner-announcement.pokemon1, 
+.winner-announcement.pokemon2 { 
+  background: var(--neon-blue);
+  border-color: var(--neon-cyan);
+  color: var(--cyber-black);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+.winner-announcement.tie { 
+  background: var(--cyber-gray);
+  border-color: var(--neon-blue);
+  color: #ffffff;
+}
+
+/* Cyberpunk Cards Layout */
+.comparison-cards-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem !important;
+  align-items: start !important;
+  margin-bottom: 2rem !important;
+}
+
+.vs-separator {
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100%;
+  padding: 0 0.5rem !important;
+}
+
+.vs-badge {
+  background: var(--cyber-gray) !important;
+  border: 3px solid var(--neon-blue) !important;
+  border-radius: 50%;
+  width: 4rem !important;
+  height: 4rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  transition: all 0.3s ease;
+}
+
+.vs-badge:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+}
+
+.vs-badge .vs-text {
+  font-size: 1.2rem !important;
+  font-weight: 900 !important;
+  color: var(--neon-blue) !important;
+  background: none;
+  border: none;
+  padding: 0;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+}
+
+/* Cyberpunk Style Comparison Cards */
+.pokemon-card.card-comparison {
+  border: 2px solid var(--neon-blue);
+  border-radius: 12px;
+  background: var(--cyber-dark) !important;
+  padding: 1rem !important;
+  margin: 0 !important;
+  gap: 0.8rem !important;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.05);
+  transition: all 0.3s ease;
+}
+
+.pokemon-card.card-comparison:hover {
+  transform: translateY(-4px);
+  border-color: var(--neon-cyan);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 0.5),
+    inset 0 0 30px rgba(0, 255, 255, 0.1);
+}
+
+.comparison-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem !important;
+  text-align: left;
+  margin-bottom: 0.8rem !important;
+  padding: 0.6rem;
+  background: var(--cyber-gray);
+  border-radius: 8px;
+  border: 1px solid var(--neon-blue);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.comparison-sprite {
+  width: 70px !important;
+  height: 70px !important;
+  border-radius: 8px;
+  border: 2px solid var(--neon-blue);
+  background: var(--cyber-dark);
+  padding: 0.2rem !important;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.pokemon-card.card-comparison:hover .comparison-sprite {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+.comparison-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem !important;
+  flex: 1;
+}
+
+.comparison-name {
+  font-size: 1rem !important;
+  font-weight: 800;
+  margin: 0 !important;
+  color: #ffffff;
+  background: var(--cyber-gray);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--neon-blue);
+  text-align: center;
+  text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.comparison-id {
+  font-size: 0.8rem !important;
+  opacity: 0.9;
+  margin: 0 !important;
+  color: var(--neon-blue);
+  font-weight: 600;
+  text-align: center;
+  background: var(--cyber-dark);
+  padding: 0.2rem;
+  border-radius: 4px;
+  border: 1px solid var(--neon-blue);
+  font-family: 'Courier New', monospace;
+}
+
+.comparison-types {
+  display: flex;
+  gap: 0.3rem !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.3rem !important;
+}
+
+/* Cyberpunk Stats Display */
+.comparison-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem !important;
+  margin-top: auto;
+}
+
+.compact-stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.5rem !important;
+  background: var(--cyber-gray);
+  border-radius: 6px;
+  border: 1px solid var(--neon-blue);
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.2);
+}
+
+.compact-stat-item:hover {
+  background: var(--cyber-light);
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+.stat-label-compact {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 0.65rem;
+}
+
+.stat-value-compact {
+  font-weight: 800;
+  color: var(--cyber-black);
+  background: var(--neon-blue);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  min-width: 2rem;
+  text-align: center;
+  border: 1px solid var(--neon-cyan);
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+/* Cyberpunk Dashboard */
+.comparison-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem !important;
+}
+
+/* Cyberpunk Advantages Section */
+.advantages-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem !important;
+  background: var(--cyber-gray);
+  border-radius: 8px;
+  padding: 1rem !important;
+  border: 2px solid var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.advantage-column {
+  background: var(--cyber-dark);
+  border-radius: 6px !important;
+  padding: 0.8rem !important;
+  border: 1px solid var(--neon-blue);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
+}
+
+.advantage-title {
+  font-size: 0.9rem !important;
+  font-weight: 800;
+  margin: 0 0 0.8rem 0 !important;
+  text-align: center;
+  color: #ffffff;
+  background: var(--cyber-gray);
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--neon-blue);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.advantage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem !important;
+}
+
+.advantage-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem !important;
+  padding: 0.5rem !important;
+  background: var(--cyber-gray);
+  border-radius: 4px !important;
+  font-size: 0.7rem !important;
+  border: 1px solid var(--neon-blue);
+  transition: all 0.2s ease;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.1);
+}
+
+.advantage-item:hover {
+  background: var(--cyber-light);
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+.advantage-icon {
+  font-size: 0.8rem !important;
+  color: var(--neon-blue);
+}
+
+.advantage-text {
+  font-size: 0.7rem !important;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.no-advantages {
+  font-size: 0.7rem !important;
+  opacity: 0.7;
+  text-align: center;
+  font-style: italic;
+  padding: 0.5rem !important;
+  color: var(--neon-blue);
+  background: var(--cyber-gray);
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Cyberpunk Stats Comparison Section */
+.stats-comparison-section {
+  background: var(--cyber-gray);
+  border-radius: 8px;
+  padding: 1rem !important;
+  border: 2px solid var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.stats-comparison-title {
+  font-size: 0.9rem !important;
+  font-weight: 800;
+  margin: 0 0 1rem 0 !important;
+  text-align: center;
+  color: #ffffff;
+  background: var(--cyber-dark);
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--neon-blue);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.stats-comparison-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem !important;
+}
+
+.stat-comparison-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem !important;
+}
+
+.stat-comparison-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem 0;
+}
+
+.stat-name {
+  font-size: 0.7rem !important;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+}
+
+.stat-difference {
+  font-size: 0.65rem !important;
+  font-weight: 800;
+  padding: 0.2rem 0.4rem !important;
+  border-radius: 4px;
+  background: var(--cyber-dark);
+  border: 1px solid var(--neon-blue);
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.2);
+}
+
+.stat-difference.p1-leads,
+.stat-difference.p2-leads { 
+  background: var(--neon-blue);
+  border-color: var(--neon-cyan);
+  color: var(--cyber-black);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+.stat-difference.tie { 
+  background: var(--cyber-gray);
+  border-color: var(--neon-blue);
+  color: #ffffff;
+}
+
+.stat-comparison-bars {
+  display: flex;
+  gap: 0.2rem !important;
+  height: 1.2rem;
+  position: relative;
+}
+
+.stat-bar-comparison {
+  height: 100% !important;
+  border-radius: 4px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--neon-blue);
+  min-width: 2.5rem;
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+}
+
+.stat-bar-comparison.p1-bar {
+  background: linear-gradient(45deg, var(--neon-blue), var(--neon-cyan));
+}
+
+.stat-bar-comparison.p2-bar {
+  background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+}
+
+.stat-bar-comparison.winning {
+  box-shadow: 0 0 10px var(--neon-cyan);
+  transform: scale(1.02);
+}
+
+.stat-bar-comparison .stat-value {
+  font-size: 0.65rem !important;
+  font-weight: 800;
+  color: var(--cyber-black);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  font-family: 'Courier New', monospace;
+}
+
+/* Cyberpunk Type Effectiveness Section */
+.type-effectiveness-section {
+  background: var(--cyber-gray);
+  border-radius: 8px;
+  padding: 1rem !important;
+  border: 2px solid var(--neon-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.type-effectiveness-title {
+  font-size: 0.9rem !important;
+  font-weight: 800;
+  margin: 0 0 1rem 0 !important;
+  text-align: center;
+  color: #ffffff;
+  background: var(--cyber-dark);
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--neon-blue);
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.type-effectiveness-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem !important;
+}
+
+.type-effectiveness-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem !important;
+  padding: 0.6rem !important;
+  background: var(--cyber-dark);
+  border-radius: 6px !important;
+  text-align: center;
+  border: 1px solid var(--neon-blue);
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.1);
+}
+
+.type-effectiveness-item:hover {
+  background: var(--cyber-gray);
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+}
+
+.type-label {
+  font-size: 0.7rem !important;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+}
+
+.type-multiplier {
+  font-size: 0.7rem !important;
+  font-weight: 800;
+  padding: 0.4rem !important;
+  border-radius: 4px !important;
+  background: var(--cyber-gray);
+  border: 1px solid var(--neon-blue);
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.2);
+}
+
+.type-multiplier.super-effective,
+.type-multiplier.not-very-effective { 
+  background: var(--neon-blue);
+  border-color: var(--neon-cyan);
+  color: var(--cyber-black);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+.type-multiplier.neutral { 
+  background: var(--cyber-gray);
+  border-color: var(--neon-blue);
+  color: #ffffff;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .advantages-section,
+  .type-effectiveness-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem !important;
+  }
+
+  .comparison-cards-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .vs-separator {
+    order: 2;
+  }
+
+  .comparison-cards-container > .pokemon-card:first-child {
+    order: 1;
+  }
+
+  .comparison-cards-container > .pokemon-card:last-child {
+    order: 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .comparison-cards-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1rem !important;
+  }
+  
+  .vs-separator {
+    order: 2;
+    height: auto !important;
+    padding: 1rem 0 !important;
+  }
+  
+  .comparison-cards-container > .pokemon-card:first-child {
+    order: 1;
+  }
+  
+  .comparison-cards-container > .pokemon-card:last-child {
+    order: 3;
+  }
+  
+  .vs-badge {
+    transform: rotate(0deg) !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+
+  .card-content-desktop {
+    display: none;
+  }
+
+  .card-content-mobile {
+    display: flex;
+  }
+
+  .card-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+    grid-template-areas: 
+      "sprite"
+      "info"
+      "hp";
+  }
+
+  .sprite-container {
+    grid-area: sprite;
+    order: 1;
+  }
+
+  .header-info {
+    grid-area: info;
+    order: 2;
+    align-items: center;
+  }
+
+  .hp-badge {
+    grid-area: hp;
+    order: 3;
+    justify-self: center;
+    margin-top: 0.5rem;
+  }
+
+  .attributes-grid,
+  .moves-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3rem !important;
+  }
+
+  .stat-label {
+    width: auto;
+    text-align: center;
+  }
+
+  .pokemon-card.card-comparison {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .comparison-sprite {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .comparison-name {
+    font-size: 0.9rem !important;
+  }
+
+  .comparison-id {
+    font-size: 0.7rem !important;
+  }
+
+  .comparison-title {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  .vs-badge {
+    transform: rotate(90deg);
+  }
+
+  .pokemon-card {
+    width: 95vw;
+    max-width: 95vw;
+  }
+
+  .pokemon-card.card-comparison {
+    width: 95vw;
+    max-width: 95vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .pokemon-card {
+    margin: 0.25rem !important;
+    padding: 0.5rem !important;
+  }
+
+  .comparison-container {
+    padding: 1rem !important;
+  }
+
+  .advantage-column,
+  .stats-comparison-section,
+  .type-effectiveness-section {
+    padding: 0.8rem !important;
+  }
+
+  .moves-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-cards-container {
+    gap: 0.6rem !important;
+  }
+
+  .pokemon-card.card-comparison {
+    padding: 0.8rem !important;
+    gap: 0.5rem !important;
+  }
+  
+  .comparison-card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem !important;
+  }
+  
+  .comparison-sprite {
+    width: 55px !important;
+    height: 55px !important;
+  }
+  
+  .comparison-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  .pokemon-card,
+  .pokemon-sprite,
+  .stat-bar,
+  .move-item,
+  .stat-bar-comparison,
+  .pokemon-card.rare,
+  .pokemon-card.shiny::before,
+  .comparison-container::after {
+    transition: none;
+    animation: none;
+  }
+
+  .pokemon-card:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pokemon-card {
+    border: 3px solid white;
+    background: black;
+  }
+
+  .energy-symbol,
+  .attribute-item,
+  .move-item {
+    border: 2px solid white;
+  }
+
+  .stat-bar {
+    background: white;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .pokemon-card {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+}
+
+/* ===== CHAT INTEGRATION FIXES ===== */
+.message.bot:has(.pokemon-card),
+.message.bot:has(.comparison-container) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.5rem 0 !important;
+  margin: 0.5rem 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  align-self: flex-start !important;
+}
+
+.message.bot .pokemon-card.card-standard {
+  width: 100% !important;
+  max-width: min(94vw, 1000px) !important;
+  min-width: min(280px, 85vw) !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
+}
+
+.message.bot .comparison-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
+}
+
+.pokemon-card {
+  flex-shrink: 0 !important;
+  min-width: min-content !important;
+}
+
+/* Ensure desktop layout is used when possible */
+@media (min-width: 769px) {
+  .pokemon-card .card-content-desktop {
+    display: grid !important;
+  }
+  
+  .pokemon-card .card-content-mobile {
+    display: none !important;
+  }
+}
+
+/* Chat window should not constrain cards */
+#chatWindow {
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.chat-container {
+  min-width: 0 !important;
+}
+
+.message.bot:has(.pokemon-card) + .message,
+.message.bot:has(.comparison-container) + .message {
+  margin-top: 0.5rem !important;
+}
+
+.pokemon-card.card-standard {
+  width: 100% !important;
+  max-width: min(94vw, 1000px) !important;
+}
+
+.comparison-container {
+  width: 100% !important;
+  max-width: 100% !important;
+}

@@ -1,0 +1,995 @@
+/* style/style.css */
+:root {
+  --pokedex-red: #C00000;
+  --pokedex-dark-red: #900000;
+  --pokedex-yellow: #FFDE00;
+  --pokedex-gray: #4A5568;
+  --pokedex-metal: linear-gradient(135deg, #E2E8F0 0%, #CBD5E0 100%);
+}
+
+.dark {
+  --pokedex-gray: #2D3748;
+}
+
+body {
+  transition: background 0.6s ease, color 0.6s ease;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🔥 POKEDEX HEADER REDESIGN */
+.chat-header {
+  background: linear-gradient(135deg, var(--pokedex-red) 0%, var(--pokedex-dark-red) 100%);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--pokedex-gray);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Brushed Metal Texture */
+.chat-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.1) 2px,
+      rgba(255,255,255,0.1) 4px
+    );
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Scan Lines Animation */
+.chat-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0,0,0,0.1) 50%
+  );
+  background-size: 100% 4px;
+  animation: scanLines 2s linear infinite;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+@keyframes scanLines {
+  0% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* Animated Pokéball Logo */
+.chat-header img[alt="Pokéball"] {
+  animation: pokeFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+@keyframes pokeFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(5deg); }
+}
+
+/* Status LED Indicator */
+.chat-header::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 80px;
+  width: 8px;
+  height: 8px;
+  background: #EF4444;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: ledPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 10px #EF4444;
+}
+
+@keyframes ledPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Header Buttons - Pokedex Style */
+.chat-header button {
+  background: var(--pokedex-metal);
+  border: 2px solid var(--pokedex-gray);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-header button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s;
+}
+
+.chat-header button:hover::before {
+  left: 100%;
+}
+
+.chat-header button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-color: var(--pokedex-yellow);
+}
+
+.chat-header button:active {
+  transform: translateY(0px);
+}
+
+/* Header Title Styling */
+.chat-header h1 {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* 💬 ENHANCED CHAT CONTAINER */
+.chat-container {
+  width: min(95vw, 1600px);
+  max-width: 100%;
+  height: min(90vh, 100vh);
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 3px solid var(--pokedex-gray);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* 💬 ENHANCED CHAT MESSAGES */
+#chatWindow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background: transparent !important;
+  position: relative;
+}
+
+/* Enhanced Message Bubbles */
+.message {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.75rem, 1.5vw, 1rem);
+  border-radius: 1.25rem;
+  max-width: 85%;
+  word-wrap: break-word;
+  animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  line-height: 1.5;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  word-break: break-word;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+/* Bot Message - Pokedex Theme */
+.message.bot {
+  align-self: flex-start;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  color: #ffffff;
+  border: 1px solid #4B5563;
+  border-left: 4px solid var(--pokedex-red);
+  max-width: 70%;
+}
+
+.message.bot:hover {
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* User Message - Enhanced */
+.message.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  border: 1px solid #fbbf24;
+  border-right: 4px solid #fbbf24;
+  max-width: 70%;
+}
+
+.message.user:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Dark mode enhancements */
+.dark .message.bot {
+  background: linear-gradient(135deg, #374151 0%, #4B5563 100%);
+}
+
+.dark .message.user {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+/* New Message Animation */
+@keyframes messageSlideIn {
+  from {
+    transform: translateY(12px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Enhanced Input Bar */
+.chat-input-bar {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-top: 3px solid var(--pokedex-gray);
+  position: relative;
+}
+
+.dark .chat-input-bar {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+/* Enhanced Send Button */
+#sendButton {
+  background: linear-gradient(135deg, var(--pokedex-red) 0%, var(--pokedex-dark-red) 100%);
+  border: 2px solid var(--pokedex-gray);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+#sendButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s;
+}
+
+#sendButton:hover::before {
+  left: 100%;
+}
+
+#sendButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  border-color: var(--pokedex-yellow);
+}
+
+#sendButton:active {
+  transform: translateY(0px);
+}
+
+/* Enhanced Input Field */
+#userInput {
+  border: 2px solid #e5e7eb;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#userInput:focus {
+  border-color: var(--pokedex-red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1), inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dark #userInput {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.dark #userInput:focus {
+  border-color: var(--pokedex-red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Footer Styles */
+.footer-container {
+  font-weight: 600;
+  transition: color 0.4s ease;
+  width: 100%;
+  max-width: clamp(320px, 95vw, 1600px);
+  box-sizing: border-box;
+  padding: 1rem 0;
+  border-top: 2px solid var(--pokedex-gray);
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.dark .footer-container {
+  background: rgba(31, 41, 55, 0.8);
+  color: #d1d5db;
+}
+
+.footer-container a {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.footer-container a:hover {
+  color: var(--pokedex-red);
+  transform: translateY(-1px);
+}
+
+/* Responsive footer spacing */
+@media (max-width: 600px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Enhanced Scrollbar */
+#chatWindow::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chatWindow::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--pokedex-red) 0%, var(--pokedex-dark-red) 100%);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+#chatWindow::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.dark #chatWindow::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* CRITICAL FIX: Remove ALL styling from messages containing Pokémon cards */
+.message.bot:has(.pokemon-card),
+.message.bot:has(.comparison-container) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.5rem 0 !important;
+  margin: 0.5rem 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  align-self: flex-start !important;
+}
+
+/* Ensure Pokémon cards take full available width and stay left-aligned */
+.message.bot .pokemon-card,
+.message.bot .comparison-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 600px) {
+  body {
+    padding: 0.5rem !important;
+    overflow-x: hidden;
+  }
+  
+  .chat-container {
+    width: 100%;
+    height: calc(100vh - 2rem);
+    border-radius: 1rem;
+    margin: 0 auto;
+  }
+  
+  .chat-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .chat-header h1 {
+    font-size: 1.25rem;
+  }
+  
+  .chat-header img[alt="Pokéball"] {
+    width: 32px;
+    height: 32px;
+  }
+  
+  #chatWindow {
+    padding: 0.5rem;
+  }
+  
+  .message {
+    max-width: 90% !important;
+    padding: 0.75rem;
+  }
+  
+  .message.bot {
+    max-width: 85% !important;
+  }
+  
+  .message.user {
+    max-width: 85% !important;
+  }
+  
+  /* Pokémon cards should be full width on mobile */
+  .message.bot:has(.pokemon-card),
+  .message.bot:has(.comparison-container) {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  body {
+    padding: 0.25rem !important;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 1rem);
+    border-radius: 0.75rem;
+  }
+  
+  #chatWindow {
+    padding: 0.375rem;
+  }
+  
+  .message {
+    max-width: 95% !important;
+    padding: 0.5rem;
+  }
+}
+
+/* Reset Modal Styles */
+#resetModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+}
+
+#resetModal.hidden {
+  display: none;
+}
+
+#resetModal .modal-content {
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+}
+
+/* Enhanced modal animation */
+#resetModal .bg-white {
+  animation: modalBounceIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes modalBounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Make sure body doesn't scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Success/Error Message Animations */
+.success-message, .error-message {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  z-index: 10001;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideInRight 0.3s ease-out, slideOutRight 0.3s ease-in 2.7s forwards;
+  transform: translateX(400px);
+  opacity: 0;
+}
+
+.success-message {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border-left: 4px solid #047857;
+}
+
+.error-message {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border-left: 4px solid #b91c1c;
+}
+
+/* Slide in from right animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide out to right animation */
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+/* Progress bar animation */
+.message-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.8);
+  animation: progressBar 3s linear forwards;
+}
+
+@keyframes progressBar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* Simple slide in, stay, then slide out */
+@keyframes slideInStayOut {
+  0% {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  20% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+.success-message.slide, .error-message.slide {
+  animation: slideInStayOut 3s ease-in-out forwards;
+}
+
+/* ==================== SEND BUTTON STATES ==================== */
+
+#sendButton:disabled {
+  background-color: #9ca3af !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.6;
+}
+
+#sendButton:disabled:hover {
+  background-color: #9ca3af !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Dark mode disabled state */
+.dark #sendButton:disabled {
+  background-color: #6b7280 !important;
+}
+
+/* ==================== PROFESSIONAL TYPING INDICATOR ==================== */
+
+#typingIndicator {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  padding: 0.75rem 1rem !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: auto !important;
+  height: auto !important;
+  position: relative;
+  z-index: 1;
+  
+  /* Override any potential Tailwind bg classes */
+  --tw-bg-opacity: 1 !important;
+  background-color: transparent !important;
+}
+
+.professional-typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 2px solid #e5e7eb;
+  border-left: 4px solid var(--pokedex-red);
+  border-radius: 20px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: fit-content;
+  backdrop-filter: blur(8px);
+  animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode styling */
+.dark .professional-typing-indicator {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border: 2px solid #374151;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.typing-dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pokedex-red), var(--pokedex-dark-red));
+  animation: professional-pulse 1.4s ease-in-out infinite both;
+}
+
+.dark .typing-dot {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+}
+
+/* Professional pulsing animation */
+@keyframes professional-pulse {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Stagger the dot animations */
+.typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+.typing-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  letter-spacing: -0.01em;
+}
+
+.dark .typing-text {
+  color: #9ca3af;
+}
+
+/* Smooth slide-in animation */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hover effect for subtle interactivity */
+.professional-typing-indicator {
+  transition: all 0.2s ease;
+}
+
+.professional-typing-indicator:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  .professional-typing-indicator {
+    padding: 10px 16px;
+    gap: 10px;
+  }
+  
+  .typing-text {
+    font-size: 0.8125rem;
+  }
+  
+  .typing-dot {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+/* Subtle glow effect for premium feel */
+.professional-typing-indicator {
+  position: relative;
+}
+
+.professional-typing-indicator::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(135deg, var(--pokedex-red), var(--pokedex-dark-red), var(--pokedex-red));
+  border-radius: 21px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.professional-typing-indicator:hover::before {
+  opacity: 0.1;
+}
+
+.dark .professional-typing-indicator::before {
+  background: linear-gradient(135deg, #f87171, #ef4444, #f87171);
+}
+
+/* Fix header button icon sizes */
+.chat-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.chat-header button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Ensure the theme toggle emoji is consistent */
+.chat-header button.text-lg {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* Specific fix for the trash icon */
+#resetChat svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* Hide main page/body scrollbar but keep scrolling */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+
+#chatWindow::-webkit-scrollbar {
+  display: block; /* Ensure chat window scrollbar stays visible */
+  width: 8px;
+}
+
+#chatWindow::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--pokedex-red) 0%, var(--pokedex-dark-red) 100%);
+  border-radius: 8px;
+}
+
+
+/* Message Timestamp Styles */
+.message-timestamp {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Bot message timestamp - align left */
+.message.bot .message-timestamp {
+  text-align: left;
+  color: #9CA3AF;
+}
+
+.dark .message.bot .message-timestamp {
+  color: #6B7280;
+}
+
+/* User message timestamp - align right */
+.message.user .message-timestamp {
+  text-align: right;
+  color: #FECACA;
+}
+
+.dark .message.user .message-timestamp {
+  color: #FCA5A5;
+}
+
+/* Date separator styles */
+.date-separator {
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+  width: 100%;
+}
+
+.date-separator::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+  z-index: 1;
+}
+
+.dark .date-separator::before {
+  background: linear-gradient(90deg, transparent, #4B5563, transparent);
+}
+
+.date-separator-text {
+  display: inline-block;
+  background: white;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6B7280;
+  border: 1px solid #E5E7EB;
+  position: relative;
+  z-index: 2;
+}
+
+.dark .date-separator-text {
+  background: #1F2937;
+  color: #9CA3AF;
+  border-color: #374151;
+}
+
+
+/* Ensure message content and timestamp display correctly */
+.message-content {
+  margin-bottom: 0.25rem;
+  word-wrap: break-word;
+}
+
+.message-timestamp {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Bot message timestamp - align left */
+.message.bot .message-timestamp {
+  text-align: left;
+  color: #9CA3AF;
+}
+
+.dark .message.bot .message-timestamp {
+  color: #6B7280;
+}
+
+/* User message timestamp - align right */
+.message.user .message-timestamp {
+  text-align: right;
+  color: #FECACA;
+}
+
+.dark .message.user .message-timestamp {
+  color: #FCA5A5;
+}
+
+/* Date separator styles */
+.date-separator {
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+  width: 100%;
+}
+
+.date-separator::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+  z-index: 1;
+}
+
+.dark .date-separator::before {
+  background: linear-gradient(90deg, transparent, #4B5563, transparent);
+}
+
+.date-separator-text {
+  display: inline-block;
+  background: white;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6B7280;
+  border: 1px solid #E5E7EB;
+  position: relative;
+  z-index: 2;
+}
+
+.dark .date-separator-text {
+  background: #1F2937;
+  color: #9CA3AF;
+  border-color: #374151;
+}
