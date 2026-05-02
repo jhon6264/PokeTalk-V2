@@ -5,6 +5,8 @@
 const PokemonLogic = (() => {
     // PHP Backend Configuration
     const PHP_BACKEND = 'pokemon.php';
+    const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2/';
+    const USE_PHP_BACKEND = false;
     
     // Enhanced Pokémon Data (now only for quick lookups)
     const POKEMON_DATA = {
@@ -155,6 +157,17 @@ const PokemonLogic = (() => {
         if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
             return cached.data;
         }
+
+        if (!USE_PHP_BACKEND) {
+            const directData = await callDirectPokeAPI(action, params);
+
+            dataCache.set(cacheKey, {
+                data: directData,
+                timestamp: Date.now()
+            });
+
+            return directData;
+        }
         
         try {
             console.log(`🔄 Calling PHP backend: ${action}`, params);
@@ -162,6 +175,11 @@ const PokemonLogic = (() => {
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
+            }
+
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
+                throw new Error('PHP backend returned non-JSON response');
             }
             
             const result = await response.json();
@@ -180,7 +198,111 @@ const PokemonLogic = (() => {
             
         } catch (error) {
             console.error(`❌ PHP backend call failed for ${action}:`, error);
-            throw error;
+            console.warn(`PHP backend failed for ${action}; trying direct PokeAPI fallback:`, error);
+            const fallbackData = await callDirectPokeAPI(action, params);
+
+            dataCache.set(cacheKey, {
+                data: fallbackData,
+                timestamp: Date.now()
+            });
+
+            return fallbackData;
+        }
+    }
+
+    async function fetchPokeAPI(endpoint) {
+        const response = await fetch(`${POKEAPI_BASE_URL}${endpoint}`);
+
+        if (response.status === 404) {
+            throw new Error('not_found');
+        }
+
+        if (!response.ok) {
+            throw new Error(`PokeAPI HTTP ${response.status}`);
+        }
+
+        return await response.json();
+    }
+
+    async function fetchCombinedDirect(name) {
+        const normalizedName = name.toLowerCase();
+        const [pokemon, species] = await Promise.all([
+            fetchPokeAPI(`pokemon/${normalizedName}`),
+            fetchPokeAPI(`pokemon-species/${normalizedName}`)
+        ]);
+
+        return { pokemon, species };
+    }
+
+    async function getAllPokemonNamesDirect() {
+        const data = await fetchPokeAPI('pokemon?limit=10000');
+        return data.results.map(pokemon => pokemon.name);
+    }
+
+    async function callDirectPokeAPI(action, params = {}) {
+        switch (action) {
+            case 'getPokemon':
+                return await fetchPokeAPI(`pokemon/${params.name.toLowerCase()}`);
+
+            case 'getSpecies':
+                return await fetchPokeAPI(`pokemon-species/${params.name.toLowerCase()}`);
+
+            case 'getPokemonData':
+                return await fetchCombinedDirect(params.name);
+
+            case 'getEvolution': {
+                const species = await fetchPokeAPI(`pokemon-species/${params.name.toLowerCase()}`);
+                if (!species.evolution_chain?.url) {
+                    return { chain: null, has_evolutions: false };
+                }
+
+                const evolutionResponse = await fetch(species.evolution_chain.url);
+                if (!evolutionResponse.ok) {
+                    throw new Error(`PokeAPI HTTP ${evolutionResponse.status}`);
+                }
+
+                const evolutionData = await evolutionResponse.json();
+                return {
+                    chain: evolutionData.chain,
+                    id: evolutionData.id
+                };
+            }
+
+            case 'getComparison': {
+                const [pokemon1, pokemon2] = await Promise.all([
+                    fetchCombinedDirect(params.pokemon1),
+                    fetchCombinedDirect(params.pokemon2)
+                ]);
+
+                return {
+                    pokemon1,
+                    pokemon2,
+                    comparison: {
+                        total_stats_1: pokemon1.pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0),
+                        total_stats_2: pokemon2.pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0),
+                        type_advantage: 1.0
+                    }
+                };
+            }
+
+            case 'searchPokemon': {
+                if (!params.query || params.query.length < 2) return [];
+
+                const allPokemon = await getAllPokemonNamesDirect();
+                return allPokemon
+                    .filter(name => name.includes(params.query.toLowerCase()))
+                    .slice(0, 10);
+            }
+
+            case 'getAllPokemonNames':
+                return await getAllPokemonNamesDirect();
+
+            case 'clearCache':
+                dataCache.clear();
+                return { message: 'Frontend cache cleared successfully' };
+
+            default:
+                throw new Error(`Unsupported fallback action: ${action}`);
         }
     }
 
@@ -554,8 +676,9 @@ const PokemonLogic = (() => {
         // Cache management
         clearCache: () => {
             dataCache.clear();
-            // Also clear PHP backend cache
-            fetch(`${PHP_BACKEND}?action=clearCache`).catch(console.warn);
+            if (USE_PHP_BACKEND) {
+                fetch(`${PHP_BACKEND}?action=clearCache`).catch(console.warn);
+            }
         },
         
         // Initialization

@@ -1776,14 +1776,14 @@ function simplifyExplanation(text) {
         return ConversationManager.getRandomResponse('evolutionQuestions', {pokemon: capitalize(pokemonName)});
     }
 
-    async function handleEnhancedGreeting() {
+    async function handleEnhancedGreeting(input = '') {
         const preferences = ContextMemory.getUserPreferences();
         const profile = ContextMemory.getUserProfile();
         
         // Get a varied greeting
         const response = GreetingRotation.getVariedGreeting(preferences);
         
-        await smartBotReply(response, userInput);
+        await smartBotReply(response, input);
         
         
         // Update session count
@@ -1857,14 +1857,14 @@ function simplifyExplanation(text) {
         return simpleGreetings.includes(text.toLowerCase().trim());
     }
 
-    async function handleThanks() {
+    async function handleThanks(input = '') {
         if (!window.SocialSystem) {
             await smartBotReply(ConversationManager.getRandomResponse('thanks'));
             return;
         }
         
         const response = window.SocialSystem.getThanksResponse();
-        await smartBotReply(response, userInput);
+        await smartBotReply(response, input);
         window.SocialSystem.updateFriendship(2);
     }
 
@@ -2019,7 +2019,7 @@ async function handlePendingFollowUp(input) {
                 "I'm here to help with all things Pokémon! What would you like to explore?"
             ];
             const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
-            await smartBotReply(randomSuggestion, userInput);
+            await smartBotReply(randomSuggestion, input);
             return;
         }
     }
@@ -2049,10 +2049,10 @@ async function handlePendingFollowUp(input) {
             "Cool! Want to learn about a particular Pokémon?"
         ];
         const response = casualResponses[Math.floor(Math.random() * casualResponses.length)];
-        await smartBotReply(response, userInput);
+        await smartBotReply(response, input);
     } else {
         const response = window.SocialSystem.getCasualResponse();
-        await botReply(response, userInput);
+        await smartBotReply(response, input);
         window.SocialSystem.updateFriendship(1);
     }
 }
@@ -2114,7 +2114,7 @@ async function handleConfusion(input) {
         "Let me help! You can:\n• Ask about Pokémon: 'Show me Pikachu'\n• Compare: 'Pikachu vs Raichu'\n• See evolutions: 'Evolution of Eevee'\nWhat would you like to try?"
     ];
     const response = confusionResponses[Math.floor(Math.random() * confusionResponses.length)];
-    await smartBotReply(response, userInput);
+    await smartBotReply(response, input);
 }
 
 async function handleSimpleAffirmative(input) {
@@ -2127,7 +2127,7 @@ async function handleSimpleAffirmative(input) {
         "Excellent! Which Pokémon shall we discover together?"
     ];
     const response = affirmativeResponses[Math.floor(Math.random() * affirmativeResponses.length)];
-    await smartBotReply(response, userInput);
+    await smartBotReply(response, input);
 }
 
 async function handleSimpleNegative(input) {
@@ -2139,7 +2139,7 @@ async function handleSimpleNegative(input) {
         "No worries! Just let me know what you'd like to explore!"
     ];
     const response = negativeResponses[Math.floor(Math.random() * negativeResponses.length)];
-    await smartBotReply(response, userInput);
+    await smartBotReply(response, input);
 }
 
     // ==================== MAIN MESSAGE HANDLER ====================
@@ -2197,13 +2197,13 @@ if (ConversationManager.pendingFollowUp) {
 
         // Enhanced greeting detection
         if (detectGreetingIntent(normalized)) {
-            await handleEnhancedGreeting();
+            await handleEnhancedGreeting(text);
             return;
         }
 
         // Enhanced thanks detection
         if (detectThanksIntent(normalized)) {
-            await handleThanks();
+            await handleThanks(text);
             return;
         }
 
@@ -2345,7 +2345,7 @@ if (ConversationManager.pendingFollowUp) {
         }
         
         const response = window.SocialSystem.getGreetingResponse();
-        await smartBotReply(response, userInput);
+        await smartBotReply(response);
         window.SocialSystem.updateFriendship(3);
     }
 
